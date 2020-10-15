@@ -59,8 +59,12 @@ public class SystemHandler extends AbstractHandler {
         StringBuilder stringText = new StringBuilder();
         stringText.append("*Это вспомогательное сообщение - здесь назодятся всё что я умею.*").append(END_LINE).append(END_LINE);
         stringText.append("[/start](/start) - приветственное сообщение").append(END_LINE);
-        stringText.append("[/help](/help) - вспомогательное сообщение").append(END_LINE);
-        stringText.append("[/id](/id) - узнать свой ID в telegram").append(END_LINE);
+        stringText.append("[/help](/help) - узнать все что я умею").append(END_LINE);
+        stringText.append("[/langtest](/langtest) - запуск теста").append(END_LINE);
+        stringText.append("[/timetorepeat](/timetorepeat) - установить время, через которое будет приходить новый тест").append(END_LINE);
+        stringText.append("[/wordsintest](/wordsintest) - Установить количество слов в тесте").append(END_LINE);
+        stringText.append("[/addword](/addword) - добавить слово").append(END_LINE);
+        stringText.append("[/addword](/addword) - добавить слово").append(END_LINE);
         //stringText.append("/*notify* _time-in-sec_  - receive notification from me after the specified time").append(END_LINE);
 
         sendMessage.setText(stringText.toString());
