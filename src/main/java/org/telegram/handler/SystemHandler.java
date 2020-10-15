@@ -1,0 +1,69 @@
+package org.telegram.handler;
+
+import org.telegram.bot.Bot;
+import org.telegram.command.Command;
+import org.telegram.command.ParsedCommand;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import java.util.logging.Logger;
+
+public class SystemHandler extends AbstractHandler {
+    private static final Logger logger = Logger.getLogger(SystemHandler.class.getName());
+    private final String END_LINE = "\n";
+
+    public SystemHandler(Bot bot) {
+        super(bot);
+    }
+
+    @Override
+    public String operate(String chatId, ParsedCommand parsedCommand, Update update) {
+        Command command = parsedCommand.getCommand();
+
+        switch (command){
+            case START:
+                bot.sendQueue.add(getStartMessage(chatId));
+                break;
+            case HELP:
+                bot.sendQueue.add(getHelpMessage(chatId));
+                break;
+            case ID:
+                return "Your telegramID: " + update.getMessage().getFrom().getId();
+        }
+        //Ничего не вернет если команда не распознана
+        return "";
+    }
+    private SendMessage getStartMessage(String chatID){
+        //Создаем отправитель сообщений
+        SendMessage sendMessage = new SendMessage();
+        //Указываем ID куда отправляем сообщение
+        sendMessage.setChatId(chatID);
+        //???
+        sendMessage.enableMarkdown(true);
+
+        StringBuilder stringText = new StringBuilder();
+        stringText.append("Привет я бот Артёма").append(END_LINE);
+        stringText.append("Я создан чтобы помочь изучать языки").append(END_LINE);
+        stringText.append("Чтобы узать что я умею - введи команду [/help](/help)");
+
+        sendMessage.setText(stringText.toString());
+        return sendMessage;
+    }
+    private SendMessage getHelpMessage(String chatID){
+        //Создаем отправитель сообщений
+        SendMessage sendMessage = new SendMessage();
+        //Указываем ID куда отправляем сообщение
+        sendMessage.setChatId(chatID);
+        //???
+        sendMessage.enableMarkdown(true);
+
+        StringBuilder stringText = new StringBuilder();
+        stringText.append("*Это вспомогательное сообщение - здесь назодятся всё что я умею.*").append(END_LINE).append(END_LINE);
+        stringText.append("[/start](/start) - приветственное сообщение").append(END_LINE);
+        stringText.append("[/help](/help) - вспомогательное сообщение").append(END_LINE);
+        stringText.append("[/id](/id) - узнать свой ID в telegram").append(END_LINE);
+        //stringText.append("/*notify* _time-in-sec_  - receive notification from me after the specified time").append(END_LINE);
+
+        sendMessage.setText(stringText.toString());
+        return sendMessage;
+    }
+}
