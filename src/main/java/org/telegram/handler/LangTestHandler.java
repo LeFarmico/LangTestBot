@@ -1,23 +1,22 @@
 package org.telegram.handler;
 
+import com.opencsv.CSVWriter;
 import org.telegram.ability.LangTest;
 import org.telegram.bot.Bot;
 import org.telegram.command.Command;
 import org.telegram.command.ParsedCommand;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
+
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiValidationException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
@@ -25,7 +24,11 @@ import java.util.logging.Logger;
 public class LangTestHandler extends AbstractHandler {
     private static final Logger logger = Logger.getLogger(LangTestHandler.class.getName());
     private static int rep = 1;
-    int repeatCount = 3;
+    static int repeatCount = 3;
+    static int repeatTimeMin = 1;
+
+    Path path = Paths.get("src/main/java/org/telegram/laguageWords/English.csv");
+    File CSVFile = path.toFile();
 
 
     public LangTestHandler(Bot bot) { super(bot); }
@@ -46,8 +49,16 @@ public class LangTestHandler extends AbstractHandler {
             case WRONGANSWER:
                 wrongAnswer(chatId, update);
                 logger.info("Command [" + command.toString() + "] started");
+                break;
             case WORDSINTEST:
-                setWordsInTest(chatId, update);
+                setWordsInTest(chatId, parsedCommand);
+                break;
+            case TIMETOREPEAT:
+                setTimeBetweenTests(chatId, parsedCommand);
+                break;
+            case ADDWORD:
+                addWord(chatId, parsedCommand, CSVFile);
+                break;
         }
         return null;
     }
@@ -65,6 +76,9 @@ public class LangTestHandler extends AbstractHandler {
             runLangTest(bot, chatId);
             rep++;
         }else if(rep == repeatCount){
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(chatId).setText("Следующий тест начнется через: " + repeatTimeMin + " минут.");
+            bot.sendQueue.add(sendMessage);
             class TestSandler extends TimerTask {
                 @Override
                 public void run() {
@@ -74,32 +88,63 @@ public class LangTestHandler extends AbstractHandler {
             }
             TimerTask timerTask = new TestSandler();
             Timer timer = new Timer(true);
-            timer.schedule(timerTask, 10*100*10);
+            timer.schedule(timerTask, 10*100*1*repeatTimeMin);
         }
     }
     private void wrongAnswer(String chatId, Update update){
         bot.sendQueue.add(getWrongAnswerQuery(update));
         bot.sendQueue.add(getWrongAnswerMessage(chatId));
     }
-    private void setWordsInTest(String chatId, Update update){
-//        int count = Integer.parseInt(update.getMessage().);
-//        if (count < 1){
-//            repeatCount = 1;
-//        }else {
-//            repeatCount = count;
-//        }
+    private void setWordsInTest(String chatId, ParsedCommand parsedCommand){
+
         //Создаем отправитель сообщений
         SendMessage sendMessage = new SendMessage();
         //Указываем ID куда отправляем сообщение
         sendMessage.setChatId(chatId);
         //???
         sendMessage.enableMarkdown(true);
-        ForceReplyKeyboard forceReplyKeyboard = new ForceReplyKeyboard();
-        forceReplyKeyboard.setSelective(true);
-        sendMessage.setText("Введите желаемое колличество слов в тесте.");
-        sendMessage.setReplyMarkup(forceReplyKeyboard);
-        bot.sendQueue.add(sendMessage);
-        bot.sendQueue.add(forceReplyKeyboard);
+
+        if (parsedCommand.getText() != ""){
+            int count = Integer.parseInt(parsedCommand.getText());
+            if (count < 1){
+                repeatCount = 1;
+            }else {
+                repeatCount = count;
+            }
+            sendMessage.setText("Колличество слов в тесте равно: " + repeatCount);
+            bot.sendQueue.add(sendMessage);
+        }else {
+            ForceReplyKeyboard forceReplyKeyboard = new ForceReplyKeyboard();
+            forceReplyKeyboard.setSelective(true);
+            sendMessage.setReplyMarkup(forceReplyKeyboard);
+            sendMessage.setText("Введите желаемое колличество слов в тесте.");
+            bot.sendQueue.add(sendMessage);
+        }
+    }
+    private void setTimeBetweenTests(String chatId, ParsedCommand parsedCommand){
+        //Создаем отправитель сообщений
+        SendMessage sendMessage = new SendMessage();
+        //Указываем ID куда отправляем сообщение
+        sendMessage.setChatId(chatId);
+        //???
+        sendMessage.enableMarkdown(true);
+
+        if (parsedCommand.getText() != ""){
+            int count = Integer.parseInt(parsedCommand.getText());
+            if (count < 1){
+                repeatTimeMin = 1;
+            }else {
+                repeatTimeMin = count;
+            }
+            sendMessage.setText("Время мужде тестами равно: " + repeatTimeMin + " минут.");
+            bot.sendQueue.add(sendMessage);
+        }else {
+            ForceReplyKeyboard forceReplyKeyboard = new ForceReplyKeyboard();
+            forceReplyKeyboard.setSelective(true);
+            sendMessage.setReplyMarkup(forceReplyKeyboard);
+            sendMessage.setText("Введите желаемое время между тестами (в минутах).");
+            bot.sendQueue.add(sendMessage);
+        }
     }
 
     private SendMessage getRightAnswerMessage(String chatId){
@@ -144,9 +189,50 @@ public class LangTestHandler extends AbstractHandler {
         return  callbackQuery;
     }
 
+    private void addWord(String chatId, ParsedCommand parsedCommand, File CSVFile){
+        //Создаем отправитель сообщений
+        SendMessage sendMessage = new SendMessage();
+        //Указываем ID куда отправляем сообщение
+        sendMessage.setChatId(chatId);
+        //???
+        sendMessage.enableMarkdown(true);
+
+        if (parsedCommand.getText() != ""){
+            String[] words = parsedCommand.getText().split(" ");
+            if (words.length < 2){
+                sendMessage.setText("Не верное колличество слов, попробуйте еще раз.");
+                bot.sendQueue.add(sendMessage);
+            }else if (words.length == 2){
+                try {
+                        CSVWriter csvWriter = new CSVWriter(
+                                new FileWriter(CSVFile, true),
+                                '\t',
+                                ' ',
+                                ' ',
+                                "\n");
+                        csvWriter.writeNext(words);
+                        csvWriter.close();
+                        sendMessage.setText("Добавлено слово: " + words[0] + " - " + words[1]);
+                        bot.sendQueue.add(sendMessage);
+                    }catch (IOException e){
+                    logger.warning(e.toString());
+                }
+            }else {
+                sendMessage.setText("Не верные данные, попробуйте еще раз.");
+                bot.sendQueue.add(sendMessage);
+            }
+        }else {
+            ForceReplyKeyboard forceReplyKeyboard = new ForceReplyKeyboard();
+            forceReplyKeyboard.setSelective(true);
+            sendMessage.setReplyMarkup(forceReplyKeyboard);
+            sendMessage.setText("Введите новое слово в словар, в формате: Слово Перевод.");
+            bot.sendQueue.add(sendMessage);
+        }
+    }
     private EditMessageReplyMarkup removeButtonClick(String chatId, Update update) {
         EditMessageReplyMarkup edit = new EditMessageReplyMarkup();
         edit.setChatId(chatId).setMessageId(update.getCallbackQuery().getMessage().getMessageId());
         return edit;
     }
 }
+
