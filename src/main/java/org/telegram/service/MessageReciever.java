@@ -85,6 +85,7 @@ public class MessageReciever implements  Runnable{
             case LANGTEST:
             case RIGHTANSWER:
             case WRONGANSWER:
+            case WORDSINTEST:
                 LangTestHandler langTestHandler = new LangTestHandler(bot);
                 logger.info("Handler for command[" + command.toString() + "] is");
                 return langTestHandler;
