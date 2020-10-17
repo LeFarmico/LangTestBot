@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 public class MessageReciever implements  Runnable{
     private static final Logger logger = Logger.getLogger(MessageSender.class.getName());
-    private final int WAIT_FOR_NEW_MESSAGE = 1000;
     private Bot bot;
     Parser parser;
 
@@ -31,6 +30,7 @@ public class MessageReciever implements  Runnable{
                 analyze(object);
             }
             try {
+                int WAIT_FOR_NEW_MESSAGE = 1000;
                 Thread.sleep(WAIT_FOR_NEW_MESSAGE);
             }catch (InterruptedException e){
                 logger.warning("Catch interrupt. Exit " + e);
@@ -51,7 +51,7 @@ public class MessageReciever implements  Runnable{
         Long chatId;
         ParsedCommand parsedCommand;
         if (message == null){
-            message = update.getCallbackQuery().getMessage();
+            //message = update.getCallbackQuery().getMessage();
             chatId = update.getCallbackQuery().getMessage().getChatId();
             parsedCommand = parser.getParsedCommand(update.getCallbackQuery().getData());
         }else{

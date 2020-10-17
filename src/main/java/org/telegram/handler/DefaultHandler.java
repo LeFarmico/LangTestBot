@@ -39,11 +39,7 @@ public class DefaultHandler extends AbstractHandler {
                 sendMessage.enableMarkdown(true);
 
                 int count = Integer.parseInt(update.getMessage().getText());
-                if (count < 1){
-                    LangTestHandler.repeatCount = 1;
-                }else {
-                    LangTestHandler.repeatCount = count;
-                }
+                LangTestHandler.repeatCount = Math.max(count, 1);
 
                 sendMessage.setText("Колличество слов в тесте равно: " + LangTestHandler.repeatCount);
 
@@ -63,11 +59,7 @@ public class DefaultHandler extends AbstractHandler {
                 sendMessage.enableMarkdown(true);
 
                 int count = Integer.parseInt(update.getMessage().getText());
-                if (count < 1) {
-                    LangTestHandler.repeatTimeMin = 1;
-                } else {
-                    LangTestHandler.repeatTimeMin = count;
-                }
+                LangTestHandler.repeatTimeMin = Math.max(count, 1);
 
                 sendMessage.setText("Время мужде тестами равно: " + LangTestHandler.repeatTimeMin + " минут.");
 

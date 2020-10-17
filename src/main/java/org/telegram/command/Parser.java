@@ -56,8 +56,8 @@ public class Parser {
 
         if (trimText.contains(" ")) {
             int indexOfSpace = trimText.indexOf(" ");
-            commandText = new Pair<String, String>(trimText.substring(0, indexOfSpace), trimText.substring(indexOfSpace+1));
-        }else commandText = new Pair<String, String>(trimText,"");
+            commandText = new Pair<>(trimText.substring(0, indexOfSpace), trimText.substring(indexOfSpace+1));
+        }else commandText = new Pair<>(trimText,"");
         return commandText;
     }
     private boolean isCommand(String text){

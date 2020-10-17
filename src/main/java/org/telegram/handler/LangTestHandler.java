@@ -88,7 +88,7 @@ public class LangTestHandler extends AbstractHandler {
             }
             TimerTask timerTask = new TestSandler();
             Timer timer = new Timer(true);
-            timer.schedule(timerTask, 10*100*1*repeatTimeMin);
+            timer.schedule(timerTask, 10*100*60*repeatTimeMin);
         }
     }
     private void wrongAnswer(String chatId, Update update){
@@ -104,22 +104,17 @@ public class LangTestHandler extends AbstractHandler {
         //???
         sendMessage.enableMarkdown(true);
 
-        if (parsedCommand.getText() != ""){
+        if (!parsedCommand.getText().equals("")){
             int count = Integer.parseInt(parsedCommand.getText());
-            if (count < 1){
-                repeatCount = 1;
-            }else {
-                repeatCount = count;
-            }
+            repeatCount = Math.max(count, 1);
             sendMessage.setText("Колличество слов в тесте равно: " + repeatCount);
-            bot.sendQueue.add(sendMessage);
         }else {
             ForceReplyKeyboard forceReplyKeyboard = new ForceReplyKeyboard();
             forceReplyKeyboard.setSelective(true);
             sendMessage.setReplyMarkup(forceReplyKeyboard);
             sendMessage.setText("Введите желаемое колличество слов в тесте.");
-            bot.sendQueue.add(sendMessage);
         }
+        bot.sendQueue.add(sendMessage);
     }
     private void setTimeBetweenTests(String chatId, ParsedCommand parsedCommand){
         //Создаем отправитель сообщений
@@ -129,22 +124,17 @@ public class LangTestHandler extends AbstractHandler {
         //???
         sendMessage.enableMarkdown(true);
 
-        if (parsedCommand.getText() != ""){
+        if (!parsedCommand.getText().equals("")){
             int count = Integer.parseInt(parsedCommand.getText());
-            if (count < 1){
-                repeatTimeMin = 1;
-            }else {
-                repeatTimeMin = count;
-            }
+            repeatTimeMin = Math.max(count, 1);
             sendMessage.setText("Время мужде тестами равно: " + repeatTimeMin + " минут.");
-            bot.sendQueue.add(sendMessage);
         }else {
             ForceReplyKeyboard forceReplyKeyboard = new ForceReplyKeyboard();
             forceReplyKeyboard.setSelective(true);
             sendMessage.setReplyMarkup(forceReplyKeyboard);
             sendMessage.setText("Введите желаемое время между тестами (в минутах).");
-            bot.sendQueue.add(sendMessage);
         }
+        bot.sendQueue.add(sendMessage);
     }
 
     private SendMessage getRightAnswerMessage(String chatId){
@@ -197,7 +187,7 @@ public class LangTestHandler extends AbstractHandler {
         //???
         sendMessage.enableMarkdown(true);
 
-        if (parsedCommand.getText() != ""){
+        if (!parsedCommand.getText().equals("")){
             String[] words = parsedCommand.getText().split(" ");
             if (words.length < 2){
                 sendMessage.setText("Не верное колличество слов, попробуйте еще раз.");

@@ -43,7 +43,7 @@ public class SystemHandler extends AbstractHandler {
         StringBuilder stringText = new StringBuilder();
         stringText.append("Привет я бот Артёма").append(END_LINE);
         stringText.append("Я создан чтобы помочь изучать языки").append(END_LINE);
-        stringText.append("Чтобы узать что я умею - введи команду [/help](/help)");
+        stringText.append("Чтобы узнать что я умею - введи команду [/help](/help)");
 
         sendMessage.setText(stringText.toString());
         return sendMessage;
@@ -63,7 +63,6 @@ public class SystemHandler extends AbstractHandler {
         stringText.append("[/langtest](/langtest) - запуск теста").append(END_LINE);
         stringText.append("[/timetorepeat](/timetorepeat) - установить время, через которое будет приходить новый тест").append(END_LINE);
         stringText.append("[/wordsintest](/wordsintest) - Установить количество слов в тесте").append(END_LINE);
-        stringText.append("[/addword](/addword) - добавить слово").append(END_LINE);
         stringText.append("[/addword](/addword) - добавить слово").append(END_LINE);
         //stringText.append("/*notify* _time-in-sec_  - receive notification from me after the specified time").append(END_LINE);
 
