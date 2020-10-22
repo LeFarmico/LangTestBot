@@ -136,49 +136,6 @@ public class LangTestHandler extends AbstractHandler {
         }
         bot.sendQueue.add(sendMessage);
     }
-
-    private SendMessage getRightAnswerMessage(String chatId){
-        //Создаем отправитель сообщений
-        SendMessage sendMessage = new SendMessage();
-        //Указываем ID куда отправляем сообщение
-        sendMessage.setChatId(chatId);
-        //???
-        sendMessage.enableMarkdown(true);
-
-        sendMessage.setText("Верный ответ!");
-        return sendMessage;
-    }
-    private SendMessage getWrongAnswerMessage(String chatId){
-        //Создаем отправитель сообщений
-        SendMessage sendMessage = new SendMessage();
-        //Указываем ID куда отправляем сообщение
-        sendMessage.setChatId(chatId);
-        //???
-        sendMessage.enableMarkdown(true);
-
-        sendMessage.setText("Не верный ответ! Попробуйте еще раз");
-        return sendMessage;
-    }
-
-    private AnswerCallbackQuery getRightAnswerQuery(Update update){
-        AnswerCallbackQuery callbackQuery = new AnswerCallbackQuery();
-        callbackQuery.setCallbackQueryId(
-                update
-                        .getCallbackQuery()
-                        .getId())
-                .setText("Верный ответ");
-        return  callbackQuery;
-    }
-    private AnswerCallbackQuery getWrongAnswerQuery(Update update){
-        AnswerCallbackQuery callbackQuery = new AnswerCallbackQuery();
-        callbackQuery.setCallbackQueryId(
-                update
-                        .getCallbackQuery()
-                        .getId())
-                .setText("Вы ошиблись");
-        return  callbackQuery;
-    }
-
     private void addWord(String chatId, ParsedCommand parsedCommand, File CSVFile){
         //Создаем отправитель сообщений
         SendMessage sendMessage = new SendMessage();
@@ -224,5 +181,48 @@ public class LangTestHandler extends AbstractHandler {
         edit.setChatId(chatId).setMessageId(update.getCallbackQuery().getMessage().getMessageId());
         return edit;
     }
+
+    private SendMessage getRightAnswerMessage(String chatId){
+        //Создаем отправитель сообщений
+        SendMessage sendMessage = new SendMessage();
+        //Указываем ID куда отправляем сообщение
+        sendMessage.setChatId(chatId);
+        //???
+        sendMessage.enableMarkdown(true);
+
+        sendMessage.setText("Верный ответ!");
+        return sendMessage;
+    }
+    private SendMessage getWrongAnswerMessage(String chatId){
+        //Создаем отправитель сообщений
+        SendMessage sendMessage = new SendMessage();
+        //Указываем ID куда отправляем сообщение
+        sendMessage.setChatId(chatId);
+        //???
+        sendMessage.enableMarkdown(true);
+
+        sendMessage.setText("Не верный ответ! Попробуйте еще раз");
+        return sendMessage;
+    }
+
+    private AnswerCallbackQuery getRightAnswerQuery(Update update){
+        AnswerCallbackQuery callbackQuery = new AnswerCallbackQuery();
+        callbackQuery.setCallbackQueryId(
+                update
+                        .getCallbackQuery()
+                        .getId())
+                .setText("Верный ответ");
+        return  callbackQuery;
+    }
+    private AnswerCallbackQuery getWrongAnswerQuery(Update update){
+        AnswerCallbackQuery callbackQuery = new AnswerCallbackQuery();
+        callbackQuery.setCallbackQueryId(
+                update
+                        .getCallbackQuery()
+                        .getId())
+                .setText("Вы ошиблись");
+        return  callbackQuery;
+    }
+
 }
 

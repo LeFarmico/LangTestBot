@@ -13,19 +13,19 @@ public class App {
     private static final Logger log = Logger.getLogger(App.class.getName());
     private static final int PRIORITY_FOR_SENDER = 1;
     private static final int PRIORITY_FOR_RECEIVER = 3;
-    private static final String BOT_ADMIN = "1597532648";
+    private static final String BOT_ADMIN = "505567555";
 
 
     public static void main(String[] args) {
         ApiContextInitializer.init();
-        Bot test_habr_bot = new Bot("My_personal_help_bot", "1120439674:AAGGxeQ1uP4T2bMvdA3ESu1BcTEdeE3g-yU");
+        Bot langTestBot = new Bot("My_personal_help_bot", "1120439674:AAGGxeQ1uP4T2bMvdA3ESu1BcTEdeE3g-yU");
 
-        MessageReciever messageReciever = new MessageReciever(test_habr_bot);
-        MessageSender messageSender = new MessageSender(test_habr_bot);
+        MessageReciever messageReciever = new MessageReciever(langTestBot);
+        MessageSender messageSender = new MessageSender(langTestBot);
 
         try{
-            test_habr_bot.botConnect();
-            sendStartReport(test_habr_bot);
+            langTestBot.botConnect();
+//            sendStartReport(langTestBot);
         }catch (Exception e){
             log.warning(e.getMessage());
         }
