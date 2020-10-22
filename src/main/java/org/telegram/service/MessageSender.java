@@ -1,15 +1,16 @@
 package org.telegram.service;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.bot.Bot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendSticker;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.logging.Logger;
 
 public class MessageSender implements  Runnable{
-    private static final Logger logger = Logger.getLogger(MessageSender.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(MessageSender.class.getName());
     private final int SENDER_SLEEP_TIME = 1000;
     private Bot bot;
 
@@ -34,11 +35,11 @@ public class MessageSender implements  Runnable{
                     Thread.sleep(SENDER_SLEEP_TIME);
 
                 } catch (InterruptedException e) {
-                    logger.severe(e.getMessage());
+                    logger.debug(e.getMessage());
                 }
             }
         }catch (Exception e){
-            logger.severe(e.getMessage());
+            logger.debug(e.getMessage());
         }
     }
 
@@ -59,10 +60,10 @@ public class MessageSender implements  Runnable{
                     bot.execute(sendSticker);
                     break;
                 default:
-                    logger.warning("Cant detect type of object. " + object);
+                    logger.warn("Cant detect type of object. ", object);
             }
         }catch (Exception e){
-            logger.severe(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 

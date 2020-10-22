@@ -1,14 +1,16 @@
 package org.telegram.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.bot.Bot;
 import org.telegram.command.Command;
 import org.telegram.command.ParsedCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import java.util.logging.Logger;
+
 
 public class SystemHandler extends AbstractHandler {
-    private static final Logger logger = Logger.getLogger(SystemHandler.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(SystemHandler.class.getName());
     private final String END_LINE = "\n";
 
     public SystemHandler(Bot bot) {
@@ -64,7 +66,6 @@ public class SystemHandler extends AbstractHandler {
         stringText.append("[/timetorepeat](/timetorepeat) - установить время, через которое будет приходить новый тест").append(END_LINE);
         stringText.append("[/wordsintest](/wordsintest) - Установить количество слов в тесте").append(END_LINE);
         stringText.append("[/addword](/addword) - добавить слово").append(END_LINE);
-        //stringText.append("/*notify* _time-in-sec_  - receive notification from me after the specified time").append(END_LINE);
 
         sendMessage.setText(stringText.toString());
         return sendMessage;

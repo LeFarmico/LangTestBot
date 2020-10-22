@@ -1,6 +1,8 @@
 package org.telegram.handler;
 
 import com.opencsv.CSVWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.ability.LangTest;
 import org.telegram.bot.Bot;
 import org.telegram.command.Command;
@@ -19,10 +21,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Logger;
+
 
 public class LangTestHandler extends AbstractHandler {
-    private static final Logger logger = Logger.getLogger(LangTestHandler.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(LangTestHandler.class.getName());
     private static int rep = 1;
     static int repeatCount = 3;
     static int repeatTimeMin = 1;
@@ -162,7 +164,7 @@ public class LangTestHandler extends AbstractHandler {
                         sendMessage.setText("Добавлено слово: " + words[0] + " - " + words[1]);
                         bot.sendQueue.add(sendMessage);
                     }catch (IOException e){
-                    logger.warning(e.toString());
+                    logger.error(e.toString());
                 }
             }else {
                 sendMessage.setText("Не верные данные, попробуйте еще раз.");

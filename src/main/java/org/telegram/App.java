@@ -1,16 +1,18 @@
 package org.telegram;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.bot.Bot;
 import org.telegram.service.MessageReciever;
 import org.telegram.service.MessageSender;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import java.util.logging.Logger;
+
 
 
 public class App {
-    private static final Logger log = Logger.getLogger(App.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(App.class);
     private static final int PRIORITY_FOR_SENDER = 1;
     private static final int PRIORITY_FOR_RECEIVER = 3;
     private static final String BOT_ADMIN = "505567555";
@@ -25,9 +27,10 @@ public class App {
 
         try{
             langTestBot.botConnect();
+            log.info("Bot connected");
 //            sendStartReport(langTestBot);
         }catch (Exception e){
-            log.warning(e.getMessage());
+            log.error(e.getMessage());
         }
 
         Thread receiver = new Thread(messageReciever);

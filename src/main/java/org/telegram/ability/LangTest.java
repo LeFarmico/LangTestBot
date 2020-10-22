@@ -2,6 +2,8 @@ package org.telegram.ability;
 
 import lombok.Getter;
 import lombok.ToString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.bot.Bot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -13,11 +15,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.logging.Logger;
+
 
 @ToString
 public class LangTest implements Runnable {
-    private  static final java.util.logging.Logger logger = Logger.getLogger(LangTest.class.getName());
+    private  static final Logger logger = LoggerFactory.getLogger(LangTest.class);
     private static final Set<Integer> usedLines = new HashSet<>();
 
     Bot bot;
@@ -82,7 +84,7 @@ public class LangTest implements Runnable {
             String splitter = "\t";
             return line.split(splitter);
         }catch (Exception e) {
-            logger.warning(e.toString());
+            logger.error("File not found",e);
         }
         return new String[0];
     }
@@ -134,7 +136,7 @@ public class LangTest implements Runnable {
         try{
             return (int) Files.lines(path).count();
         }catch (IOException e){
-            logger.warning(e.toString());
+            logger.error("IO Exception",e);
         }
         return -1;
     }

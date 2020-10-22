@@ -1,5 +1,7 @@
 package org.telegram.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.bot.Bot;
 import org.telegram.command.Command;
 import org.telegram.command.ParsedCommand;
@@ -9,10 +11,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.logging.Logger;
 
 public class MessageReciever implements  Runnable{
-    private static final Logger logger = Logger.getLogger(MessageSender.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(MessageReciever.class);
     private Bot bot;
     Parser parser;
 
@@ -33,7 +34,7 @@ public class MessageReciever implements  Runnable{
                 int WAIT_FOR_NEW_MESSAGE = 1000;
                 Thread.sleep(WAIT_FOR_NEW_MESSAGE);
             }catch (InterruptedException e){
-                logger.warning("Catch interrupt. Exit " + e);
+                logger.error("Catch interrupt. Exit ", e);
             }
         }
     }
@@ -43,7 +44,7 @@ public class MessageReciever implements  Runnable{
             logger.info("Update reciever: " + update.toString());
             analyzeForUpdateType(update);
         }else{
-            logger.warning("Cant operate type of object: " + object.toString());
+            logger.error("Cant operate type of object: ", object);
         }
     }
     private void analyzeForUpdateType(Update update){
@@ -72,7 +73,7 @@ public class MessageReciever implements  Runnable{
     }
     private AbstractHandler getHandlerForCommand(Command command){
         if(command == null){
-            logger.warning("Null command accepted. This is not good scenario.");
+            logger.warn("Null command accepted. This is not good scenario.");
             return new DefaultHandler(bot);
         }
         switch (command){
@@ -80,7 +81,7 @@ public class MessageReciever implements  Runnable{
             case HELP:
             case ID:
                 SystemHandler systemHandler = new SystemHandler(bot);
-                logger.info("Handler for command[" + command.toString() + "] is");
+                logger.info("Handler for command[" + command.toString() + "] is " + systemHandler);
                 return systemHandler;
             case LANGTEST:
             case RIGHTANSWER:
@@ -89,7 +90,7 @@ public class MessageReciever implements  Runnable{
             case TIMETOREPEAT:
             case ADDWORD:
                 LangTestHandler langTestHandler = new LangTestHandler(bot);
-                logger.info("Handler for command[" + command.toString() + "] is");
+                logger.info("Handler for command[" + command.toString() + "] is " + langTestHandler);
                 return langTestHandler;
             default:
                 logger.info("Handler for command[" + command.toString() + "] not Set. Return DefaultHandler");

@@ -2,9 +2,11 @@ package org.telegram.command;
 
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.utilites.Pair;
 
-import java.util.logging.Logger;
+
 
 // При инициализации парсера мы передаем в конструкторе имя бота,
 // для того чтобы парсер умел отличать свои команды от чужих.
@@ -12,7 +14,7 @@ import java.util.logging.Logger;
 // в ответ должена вернуться команда и текст сообщения идущий после команды.
 
 public class Parser {
-    private static final Logger log = Logger.getLogger(Parser.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(Parser.class);
     private static final String PREFIX_FOR_COMMAND = "/";
     private static final String DELIMITER_COMMAND_BOTNAME = "@";
     private String botName;
