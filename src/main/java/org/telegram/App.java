@@ -8,7 +8,7 @@ import org.telegram.service.MessageSender;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-
+import java.nio.charset.Charset;
 
 
 public class App {
@@ -19,6 +19,7 @@ public class App {
 
 
     public static void main(String[] args) {
+        System.out.println(Charset.defaultCharset().name());
         ApiContextInitializer.init();
         Bot langTestBot = new Bot("My_personal_help_bot", "1120439674:AAGGxeQ1uP4T2bMvdA3ESu1BcTEdeE3g-yU");
 
