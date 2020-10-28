@@ -27,7 +27,7 @@ public class LangTest implements Runnable {
     long repeatTime;
 
     Random random = new Random();
-    Path path = Paths.get("src/main/java/org/telegram/laguageWords/English.csv");
+    Path path = Paths.get("src/main/java/org/telegram/laguageWords/Spanish.csv");
     File CSVFile = path.toFile();
 
     public LangTest(Bot bot, String chatID) {

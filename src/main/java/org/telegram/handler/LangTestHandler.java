@@ -29,7 +29,7 @@ public class LangTestHandler extends AbstractHandler {
     static int repeatCount = 3;
     static int repeatTimeMin = 1;
 
-    Path path = Paths.get("src/main/java/org/telegram/laguageWords/English.csv");
+    Path path = Paths.get("src/main/java/org/telegram/laguageWords/Spanish.csv");
     File CSVFile = path.toFile();
 
 

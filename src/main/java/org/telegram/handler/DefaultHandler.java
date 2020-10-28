@@ -17,7 +17,7 @@ public class DefaultHandler extends AbstractHandler {
         super(bot);
     }
 
-    Path path = Paths.get("src/main/java/org/telegram/laguageWords/English.csv");
+    Path path = Paths.get("src/main/java/org/telegram/laguageWords/Spanish.csv");
     File CSVFile = path.toFile();
 
     @Override
