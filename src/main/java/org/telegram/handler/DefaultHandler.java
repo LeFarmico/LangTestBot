@@ -1,6 +1,8 @@
 package org.telegram.handler;
 
 import com.opencsv.CSVWriter;
+import org.apache.commons.io.IOUtils;
+import org.telegram.ability.LangTest;
 import org.telegram.bot.Bot;
 import org.telegram.command.ParsedCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -9,16 +11,20 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URISyntaxException;
 
 public class DefaultHandler extends AbstractHandler {
     public DefaultHandler(Bot bot) {
         super(bot);
     }
-
-    Path path = Paths.get("src/main/java/org/telegram/laguageWords/Spanish.csv");
-    File CSVFile = path.toFile();
+    File CSVFile;
+    {
+        try {
+            CSVFile = new File(getClass().getResource("/words/Spanish.csv").toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public String operate(String chatId, ParsedCommand parsedCommand, Update update) {

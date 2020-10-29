@@ -17,8 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboa
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URISyntaxException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,10 +27,14 @@ public class LangTestHandler extends AbstractHandler {
     private static int rep = 1;
     static int repeatCount = 3;
     static int repeatTimeMin = 1;
-
-    Path path = Paths.get("src/main/java/org/telegram/laguageWords/Spanish.csv");
-    File CSVFile = path.toFile();
-
+    File CSVFile;
+    {
+        try {
+            CSVFile = new File(getClass().getResource("/words/Spanish.csv").toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
     public LangTestHandler(Bot bot) { super(bot); }
 

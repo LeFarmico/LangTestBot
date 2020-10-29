@@ -11,9 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -27,8 +26,14 @@ public class LangTest implements Runnable {
     long repeatTime;
 
     Random random = new Random();
-    Path path = Paths.get("src/main/java/org/telegram/laguageWords/Spanish.csv");
-    File CSVFile = path.toFile();
+    File CSVFile;
+    {
+        try {
+            CSVFile = new File(getClass().getResource("/words/Spanish.csv").toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
     public LangTest(Bot bot, String chatID) {
         this.bot = bot;
@@ -90,7 +95,7 @@ public class LangTest implements Runnable {
     }
 
     private AnswerDescription getAnswerDescriptions(){
-        int numberOfLines = getNumberOfLines(path);
+        int numberOfLines = getNumberOfLines(CSVFile);
         while (true) {
             int numberOfCorrectWord = random.nextInt(numberOfLines)+1;
             int randomNumber1 = random.nextInt(numberOfLines )+1;
@@ -132,9 +137,9 @@ public class LangTest implements Runnable {
         }
     }
 
-    private int getNumberOfLines (Path path){
+    private int getNumberOfLines (File CSVFile){
         try{
-            return (int) Files.lines(path).count();
+            return (int) Files.lines(CSVFile.toPath()).count();
         }catch (IOException e){
             logger.error("IO Exception",e);
         }
