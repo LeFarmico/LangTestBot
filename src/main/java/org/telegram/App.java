@@ -8,7 +8,14 @@ import org.telegram.service.MessageSender;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.Charset;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.FileSystems;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class App {
